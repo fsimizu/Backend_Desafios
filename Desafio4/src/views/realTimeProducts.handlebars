@@ -1,0 +1,40 @@
+<h1>Real time products via websockets</h1>
+
+<div>
+    <ul id="productsListContainer">
+        {{#each products}}
+            <li>Code: {{this.code}} - Name: {{this.name}} - Price: {{this.price}}</li>
+        {{/each}}
+    </ul>
+</div>
+
+<form id="form">
+    <div>
+        <input type="radio" id="new" name="product" value="new" checked>
+        <label for="new">New</label>
+        <input type="radio" id="edit" name="product" value="edit">
+        <label for="edit">Edit</label>
+        <input type="radio" id="delete" name="product" value="delete">
+        <label for="delete">Delete</label>
+    </div>
+    <fieldset>
+    <legend><h3>Product details</h3></legend>
+        <div>
+            <label for="code">Code</label>
+            <input type="text" name="code" id="code" placeholder="Product code">
+        </div>
+        <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" placeholder="Product name">
+        </div>
+        <div>
+            <label for="price">Price</label>
+            <input type="number" name="price" id="price" placeholder="Product price">
+        </div>
+    </fieldset>
+
+    <input id="submit" type="submit">
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

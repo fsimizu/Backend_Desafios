@@ -1,3 +1,4 @@
+const { log } = require('console');
 const express = require('express');
 const fs = require('fs');
 const app = express();
@@ -25,21 +26,19 @@ app.get('/', (req, res) => {
 app.get('/products', async (req, res) => {
   try {
     const queryLimit = req.query.limit;
-    const prodList = await readProductsFile();
+    let prodList = await readProductsFile();
+    let message = "Retrieved all products";
 
     if (queryLimit) {
-      const prodLimited = prodList.slice(0,queryLimit);
-      return res.status(201).json({
-        status: "Success",
-        msg: "Retrieved limites results",
-        data: prodLimited}); 
+      prodList = prodList.slice(0,queryLimit);
+      message = "Retrieved limites results"
     }
-    else {
-      return res.status(201).json({
-        status: "Success",
-        msg: "Retrieved all products",
-        data: prodList});
-    }
+
+    return res.status(201).json({
+      status: "Success",
+      msg: message,
+      data: prodList});
+
   } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Internal server error' });
@@ -52,24 +51,25 @@ app.get('/products/:id', async (req, res) => {
     const prodList = await readProductsFile();
     const prodEncontrado = prodList.find(p=>p.id === prodId);
   
-  if (prodEncontrado) {
-    return res.status(201).json({
-      status: "Success",
-      msg: "Retrieve only the product with id="+prodId,
-      data: prodEncontrado});
-      }
-  else {
-    return res.status(404).json({
-      status: "Error",
-      msg: "The id "+prodId+" does not exist",
-      data: []});
+    if (prodEncontrado) {
+      return res.status(201).json({
+        status: "Success",
+        msg: "Retrieve only the product with id="+prodId,
+        data: prodEncontrado});
+        }
+    else {
+      return res.status(404).json({
+        status: "Error",
+        msg: "The id "+prodId+" does not exist",
+        data: []});
   }
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal server error' });
   }
   });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ://localhost:${port}`);
+  console.log(`Example app listening on port http://localhost:${port}`);
 })
